@@ -1,27 +1,5 @@
 #!/usr/bin/env python3
 
-"""
-Copyright 2023-2024 NXP
-SPDX-License-Identifier: Apache-2.0
-
-Models: MediaPipe's Selfie Segmenter
-Models licensed under: Apache-2.0
-Original model available at:
-https://developers.google.com/mediapipe/solutions/vision/image_segmenter
-
-Model Card:
-https://storage.googleapis.com/mediapipe-assets/Model%20Card%20MediaPipe%20Selfie%20Segmentation.pdf
-
-This model was created by:
-    Tingbo Hou, Google
-    Siargey Pisarchyk, Google
-    Karthik Raveendran, Google
-
-This script shows human segmentation from video. Application could be aimed at video conference.
-MediaPipe's Selfie Segmenter model was quantized to be accelerated by the NPU on the i.MX8M Plus
-and i.MX93 EVKs.
-"""
-
 import os
 import sys
 import subprocess
@@ -50,13 +28,10 @@ def threaded(fn):
 
 
 class CarNavigation:
-    """Selfie Segmenter GUI launcher and application"""
 
     def __init__(self):
         # Obtain GUI settings and configurations
-        glade_file = (
-            "CarNav.glade"
-        )
+        glade_file = "CarNav.glade"
         self.builder = gtk.Builder()
         self.builder.add_from_file(glade_file)
         self.builder.connect_signals(self)
@@ -82,11 +57,10 @@ class CarNavigation:
 
         # Obtain available devices
         for device in glob.glob("/sys/class/net/can*"):
-            self.device_box.append_text(device.split('/')[-1])
+            self.device_box.append_text(device.split("/")[-1])
         self.device_box.set_active(0)
 
         self.part_box.set_active(0)
-
 
         Gst.init()
         self.main_loop = GLib.MainLoop()
@@ -115,26 +89,26 @@ class CarNavigation:
         self.about_dialog.run()
         self.about_dialog.hide()
 
-
     @threaded
     def start(self, widget):
         part = self.part_box.get_active_id()
-        can  = self.device_box.get_active_text()
+        can = self.device_box.get_active_text()
 
         os.system(f"ip link set down {can}")
         os.system(f"ip link set {can} type can bitrate 250000")
         os.system(f"ip link set up {can}")
 
-
         print("Start", part, "on", can)
-        if(part == '1'):
-            os.system("canopend " + str(can) + " -i 5 -c local-/tmp/CO_command_socket &")
+        if part == "1":
+            os.system(
+                "canopend " + str(can) + " -i 5 -c local-/tmp/CO_command_socket &"
+            )
             time.sleep(2)
             subprocess.run(["python3", "sensor_input.py"])
 
-        if(part == '2'):
+        if part == "2":
             subprocess.run(["python3", "car_reverse_screen.py", str(can)])
-        
+
 
 if __name__ == "__main__":
     main = CarNavigation()
