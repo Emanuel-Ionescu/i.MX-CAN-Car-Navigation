@@ -4,8 +4,10 @@ import os
 import cv2
 import numpy as np
 
-from gi.repository import Gdk
+import gi
+gi.require_version("Gdk", "4.0")
 
+from gi.repository import Gdk
 screen = Gdk.Screen.get_default()
 SCREEN = screen.get_monitor_geometry(screen.get_primary_monitor())
 
@@ -57,7 +59,7 @@ def main():
     cv2.namedWindow("test", cv2.WINDOW_FULLSCREEN)
     cv2.setWindowProperty("test", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
-    car_frame = cv2.imread("car.jpeg")
+    car_frame = cv2.imread("car.jpg")
     car_frame = cv2.resize(
         car_frame, (int(car_frame.shape[1] * (700 / car_frame.shape[0])), 700)
     )
