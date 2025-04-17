@@ -4,8 +4,6 @@ import os
 import cv2
 import numpy as np
 
-import gi
-gi.require_version("Gdk", "4.0")
 
 from gi.repository import Gdk
 screen = Gdk.Screen.get_default()
@@ -59,12 +57,12 @@ def main():
     cv2.namedWindow("test", cv2.WINDOW_FULLSCREEN)
     cv2.setWindowProperty("test", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
-    car_frame = cv2.imread("car.jpg")
+    car_frame = cv2.imread("./data/car.jpg")
     car_frame = cv2.resize(
         car_frame, (int(car_frame.shape[1] * (700 / car_frame.shape[0])), 700)
     )
 
-    camera_frame = cv2.imread("parking.jpg")
+    camera_frame = cv2.imread("./data/parking.jpg")
     camera_frame = cv2.resize(
         camera_frame, (int(camera_frame.shape[1] * (700 / camera_frame.shape[0])), 700)
     )
@@ -77,7 +75,7 @@ def main():
 
     network = canopen.Network()
     network.connect(channel=CAN_DEVICE, interface="socketcan")
-    local_node = canopen.LocalNode(10, "CarNavigationGoPoint.eds")
+    local_node = canopen.LocalNode(10, "./data/CarNavigationGoPoint.eds")
     network.add_node(local_node)
 
     network.scanner.search(10)
