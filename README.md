@@ -37,4 +37,11 @@ CAN Bus needs resistors to mark bus terminations. i.MX8MP has termination resist
 
 
 ## 3. Software
+
+The demo consists of two parts: one simulates the parking sensors and the steering wheel position, and the other simulates the car's navigation panel when in reverse. Each part uses the CANOpen protocol in a slightly different way. The sensor simulation uses the canopend and cocomm utilities to send messages on the CAN interface, while the car navigation simulation functions as a genuine CANOpen device (e.g., stepper motor).
+
 ## 4. Release Notes
+
+| Version | Description     | Date           |
+|---------|-----------------|----------------|
+|   1.0   | Initial Release | April 24th 2025|
