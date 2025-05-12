@@ -41,7 +41,7 @@ def draw_circle_arc(image, index, angles):
     return cv2.ellipse(
         image,
         center,
-        (int(300 + index / 2), int(300 + index / 2)),
+        (int(550 + index / 2), int(550 + index / 2)),
         0,
         angles[0],
         angles[1],
@@ -71,17 +71,17 @@ def main():
 
     car_frame = cv2.imread("/opt/gopoint-apps/scripts/communication/car_navigation/data/car.jpg")
     car_frame = cv2.resize(
-        car_frame, (int(car_frame.shape[1] * (700 / car_frame.shape[0])), 700)
+        car_frame, (int(car_frame.shape[1] * (SCREEN.height / car_frame.shape[0])), SCREEN.height)
     )
 
     camera_frame = cv2.imread("/opt/gopoint-apps/scripts/communication/car_navigation/data/parking.jpg")
     camera_frame = cv2.resize(
-        camera_frame, (int(camera_frame.shape[1] * (700 / camera_frame.shape[0])), 700)
+        camera_frame, (int(camera_frame.shape[1] * (SCREEN.height / camera_frame.shape[0])), SCREEN.height)
     )
     camera_frame = camera_frame[
         :,
-        int((camera_frame.shape[1] - 1200 + car_frame.shape[1]) / 2) : int(
-            (camera_frame.shape[1] + 1200 - car_frame.shape[1]) / 2
+        int((camera_frame.shape[1] - SCREEN.width + car_frame.shape[1]) / 2) : int(
+            (camera_frame.shape[1] + SCREEN.width - car_frame.shape[1]) / 2
         ),
     ]
 
