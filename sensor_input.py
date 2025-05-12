@@ -103,10 +103,6 @@ class SensorInput:
                 val, regs = self.steering.get_value(), "0x2000 0 i8"
 
             result = subprocess.run(["cocomm", f"[1] 10 w {regs} {int(val)}"])
-            self.text += f"[1] 10 w {regs} {int(val)}\n"
-            self.text = "\n".join(self.text.splitlines()[-20:])
-            textbuffer = self.text_box.get_buffer()
-            textbuffer.set_text(self.text)
 
         return send_data
 
