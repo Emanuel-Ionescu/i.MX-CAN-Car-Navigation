@@ -1,3 +1,15 @@
+#!/usr/bin/env python3
+
+"""
+Copyright 2022-2024 NXP
+SPDX-License-Identifier: Apache-2.0
+
+The following is a demo to show CAN Open usage on i.MX boards.
+It simulates a car navigation system composed of sensors and 
+a reversing camera screen.
+Sensors are emulated using sliders.
+"""
+
 import canopen
 import time
 import os
@@ -54,15 +66,15 @@ def draw_direction(image, angle):
 
 
 def main():
-    cv2.namedWindow("test", cv2.WINDOW_FULLSCREEN)
-    cv2.setWindowProperty("test", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+    cv2.namedWindow("Car Reverse Screen", cv2.WINDOW_FULLSCREEN)
+    cv2.setWindowProperty("Car Reverse Screen", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
-    car_frame = cv2.imread("./data/car.jpg")
+    car_frame = cv2.imread("/opt/gopoint-apps/scripts/communication/car_navigation/data/car.jpg")
     car_frame = cv2.resize(
         car_frame, (int(car_frame.shape[1] * (700 / car_frame.shape[0])), 700)
     )
 
-    camera_frame = cv2.imread("./data/parking.jpg")
+    camera_frame = cv2.imread("/opt/gopoint-apps/scripts/communication/car_navigation/data/parking.jpg")
     camera_frame = cv2.resize(
         camera_frame, (int(camera_frame.shape[1] * (700 / camera_frame.shape[0])), 700)
     )
@@ -75,7 +87,7 @@ def main():
 
     network = canopen.Network()
     network.connect(channel=CAN_DEVICE, interface="socketcan")
-    local_node = canopen.LocalNode(10, "./data/CarNavigationGoPoint.eds")
+    local_node = canopen.LocalNode(10, "/opt/gopoint-apps/scripts/communication/car_navigation/data/CarNavigationGoPoint.eds")
     network.add_node(local_node)
 
     network.scanner.search(10)
@@ -115,8 +127,9 @@ def main():
 
         camera_frame_aux = draw_direction(camera_frame.copy(), steering_wheel)
 
+        # empty
         cv2.imshow(
-            "test",
+            "Car Reverse Screen",  
             cv2.resize(
                 cv2.hconcat([car_frame_aux, camera_frame_aux]),
                 (SCREEN.width, SCREEN.height),

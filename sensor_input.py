@@ -1,3 +1,16 @@
+#!/usr/bin/env python3
+
+"""
+Copyright 2022-2024 NXP
+SPDX-License-Identifier: Apache-2.0
+
+The following is a demo to show CAN Open usage on i.MX boards.
+It simulates a car navigation system composed of sensors and 
+a reversing camera screen.
+Sensors are emulated using sliders.
+"""
+
+
 import gi
 import subprocess
 import os
@@ -14,7 +27,7 @@ class SensorInput:
 
     def __init__(self):
         # Obtain GUI settings and configurations
-        glade_file = "sensor_input.glade"
+        glade_file = "/opt/gopoint-apps/scripts/communication/car_navigation/sensor_input.glade"
         self.builder = gtk.Builder()
         self.builder.add_from_file(glade_file)
         self.builder.connect_signals(self)
@@ -28,10 +41,6 @@ class SensorInput:
         self.sensor3 = self.builder.get_object("sensor3")
         self.sensor4 = self.builder.get_object("sensor4")
         self.steering = self.builder.get_object("steering")
-
-        self.open_can_output = self.builder.get_object("open-can-output")
-        self.text_box = self.builder.get_object("can-open-text")
-        self.text = ""
 
         self.sensor1.set_range(0, 50)
         self.sensor2.set_range(0, 50)
@@ -52,16 +61,13 @@ class SensorInput:
         self.steering.connect("value-changed", self.send_data_template(4))
 
         self.window = self.builder.get_object("window")
-        self.can_output_window = self.builder.get_object("can-output-window")
 
         Gst.init()
         self.main_loop = GLib.MainLoop()
 
         # Connect signals
         self.close_button.connect("clicked", self.quit_app)
-        self.close_can_output.connect("clicked", self.close_can_output_window)
         self.window.connect("delete-event", gtk.main_quit)
-        self.open_can_output.connect("clicked", self.show_can_output_window)
         self.window.show()
 
         # Reseting navigation

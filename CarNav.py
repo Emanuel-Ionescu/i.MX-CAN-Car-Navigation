@@ -1,5 +1,15 @@
 #!/usr/bin/env python3
 
+"""
+Copyright 2022-2024 NXP
+SPDX-License-Identifier: Apache-2.0
+
+The following is a demo to show CAN Open usage on i.MX boards.
+It simulates a car navigation system composed of sensors and 
+a reversing camera screen.
+Sensors are emulated using sliders.
+"""
+
 import os
 import sys
 import subprocess
@@ -31,7 +41,7 @@ class CarNavigation:
 
     def __init__(self):
         # Obtain GUI settings and configurations
-        glade_file = "CarNav.glade"
+        glade_file = "/opt/gopoint-apps/scripts/communication/car_navigation/CarNav.glade"
         self.builder = gtk.Builder()
         self.builder.add_from_file(glade_file)
         self.builder.connect_signals(self)
@@ -104,10 +114,10 @@ class CarNavigation:
                 "canopend " + str(can) + " -i 5 -c local-/tmp/CO_command_socket &"
             )
             time.sleep(2)
-            subprocess.run(["python3", "sensor_input.py"])
+            subprocess.run(["python3", "/opt/gopoint-apps/scripts/communication/car_navigation/sensor_input.py"])
 
         if part == "2":
-            subprocess.run(["python3", "car_reverse_screen.py", str(can)])
+            subprocess.run(["python3", "/opt/gopoint-apps/scripts/communication/car_navigation/car_reverse_screen.py", str(can)])
 
 
 if __name__ == "__main__":
